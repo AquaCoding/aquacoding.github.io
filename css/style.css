@@ -36,6 +36,15 @@
     margin-bottom: 23px;
 }
 
+.content-center a {
+    color: #00AEAD;
+    text-decoration: none;
+}
+
+.content-center a {
+    text-decoration: underline;
+}
+
 .services .services-icons {
     margin-top: 50px;
     display: flex;
