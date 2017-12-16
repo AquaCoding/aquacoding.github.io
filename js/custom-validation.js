@@ -24,6 +24,7 @@ button.addEventListener('click', function(event) {
                 .method('POST')
                 .url('https://formspree.io/contato@aquacoding.com.br')
                 .data(getFormJson())
+                .type('json')
                 .on('200', function(response){
                     form.insertBefore(getMessageElement('Obrigado por entrar em contato! Iremos responder o mais rápido possível.', 'success'), button);
                 })
