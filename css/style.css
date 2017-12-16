@@ -37,6 +37,14 @@
     margin-bottom: 23px;
 }
 
+.content-center p {
+    margin-bottom: 10px;
+}
+
+.content-center p:last-of-type {
+    margin-bottom: 0;
+}
+
 .content-center a {
     color: #00AEAD;
     text-decoration: none;
