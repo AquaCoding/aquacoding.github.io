@@ -98,11 +98,21 @@
     font-weight: 600;
 }
 
-.contact label .error {
+.contact .error, .contact .success {
+    display: block;
+    width: 100%;
     padding: 5px;
     font-size: 0.9rem;
     background-color: #c44040;
     box-sizing: border-box;
+    margin-bottom: 20px;
+}
+
+.contact .success {
+    background-color: #40c486;
+}
+
+.contact label > .error, .contact label > .success {
     margin-bottom: 0;
 }
 

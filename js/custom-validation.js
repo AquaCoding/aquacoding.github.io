@@ -1,35 +1,80 @@
-// Get all inputs and textarea
-var inputs = document.querySelectorAll('.contactForm input:not([type=submit]), .contactForm textArea');
-
-// Remove error messages on user new input
-inputs.forEach(function(element) {
-    element.addEventListener('input', function(event) {
-        cleanErrors(element);
-    });
-}, false);
-
-// Verify validation on form submit
 var form = document.querySelector('.contactForm');
-form.addEventListener('submit', function(event) {
+var inputs = document.querySelectorAll('.contactForm input:not([type=submit]), .contactForm textArea');
+var button = document.querySelector('.contactForm button');
+
+// Make the form sending with Ajax
+button.addEventListener('click', function(event) {
+
+    removeSubmitErrors();
+
+    var inputsProcessed = 0;
+    var isValid = true;
+
     inputs.forEach(function(element) {
         if(!element.validity.valid) {
-            element.parentNode.insertBefore(getErrorElement(element.validationMessage), element);
-            event.preventDefault();
+            removeInputErrors(element);
+            element.parentNode.insertBefore(getMessageElement(element.validationMessage, 'error'), element);
+            isValid = false;
+        }
+
+        inputsProcessed++;
+        if(inputsProcessed === inputs.length) {
+            if(isValid) {
+                aja()
+                .method('POST')
+                .url('https://formspree.io/contato@aquacoding.com.br')
+                .data(getFormJson())
+                .on('200', function(response){
+                    form.insertBefore(getMessageElement('Obrigado por entrar em contato! Iremos responder o mais rápido possível.', 'success'), button);
+                })
+                .on('40x', function(response){
+                    form.insertBefore(getMessageElement('Ocorreu um erro, por favor tente novamente.', 'error'), button);
+                })
+                .on('500', function(response){
+                    form.insertBefore(getMessageElement('Ocorreu um erro, por favor tente novamente.', 'error'), button);
+                })
+                .go();
+            }
         }
     });
 }, false);
 
-// Clean a error message from a element
-function cleanErrors(element) {
+// Prevent the default form submit
+var form = document.querySelector('.contactForm');
+form.addEventListener('submit', function(event) {
+    event.preventDefault();
+}, false);
+
+// Remove a error message from a element
+function removeInputErrors(element) {
     if(element.parentNode.querySelector('.error') != null)
         element.parentNode.removeChild(element.parentNode.querySelector('.error'));
 }
 
-// Return a default error DOMElement with a custom message
-function getErrorElement(message) {
+// Remove a submite error
+function removeSubmitErrors() {
+    var messages = form.querySelectorAll('.sucess, .error')
+    if(messages != null) {
+        messages.forEach(function(element) {
+            element.parentNode.removeChild(element);
+        });
+    }
+}
+
+// Return a default message DOMElement with a custom message and class
+function getMessageElement(message, className) {
     var errorMessage = document.createElement('span');
-        errorMessage.classList.add('error');
+        errorMessage.classList.add(className);
         errorMessage.appendChild(document.createTextNode(message));
 
     return errorMessage;
+}
+
+// Build the form json
+function getFormJson() {
+    var json = {};
+    inputs.forEach(function(element) {
+        json[element.name] = element.value;
+    })
+    return json;
 }
