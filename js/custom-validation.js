@@ -53,7 +53,7 @@ function removeInputErrors(element) {
 
 // Remove a submite error
 function removeSubmitErrors() {
-    var messages = form.querySelectorAll('.sucess, .error')
+    var messages = form.querySelectorAll('.success, .error')
     if(messages != null) {
         messages.forEach(function(element) {
             element.parentNode.removeChild(element);
