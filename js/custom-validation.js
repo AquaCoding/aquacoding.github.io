@@ -20,21 +20,18 @@ button.addEventListener('click', function(event) {
         inputsProcessed++;
         if(inputsProcessed === inputs.length) {
             if(isValid) {
-                aja()
-                .method('POST')
-                .url('https://formspree.io/contato@aquacoding.com.br')
-                .data(getFormJson())
-                .type('json')
-                .on('200', function(response){
-                    form.insertBefore(getMessageElement('Obrigado por entrar em contato! Iremos responder o mais rápido possível.', 'success'), button);
-                })
-                .on('40x', function(response){
-                    form.insertBefore(getMessageElement('Ocorreu um erro, por favor tente novamente.', 'error'), button);
-                })
-                .on('500', function(response){
-                    form.insertBefore(getMessageElement('Ocorreu um erro, por favor tente novamente.', 'error'), button);
-                })
-                .go();
+                $.ajax({
+                    url: 'https://formspree.io/contato@aquacoding.com.br',
+                    method: 'POST',
+                    data: getFormJson(),
+                    dataType: 'json',
+                    success: function(data) {
+                        form.insertBefore(getMessageElement('Obrigado por entrar em contato! Iremos responder o mais rápido possível.', 'success'), button);
+                    },
+                    error: function(err) {
+                        form.insertBefore(getMessageElement('Ocorreu um erro, por favor tente novamente.', 'error'), button);
+                    }
+                });
             }
         }
     });
