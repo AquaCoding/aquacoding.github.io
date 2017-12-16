@@ -73,6 +73,12 @@ function getFormJson() {
     var json = {};
     inputs.forEach(function(element) {
         json[element.name] = element.value;
+
+        if(element.name == '_subject')
+            json['subject'] = element.value;
     })
+
+    console.log(json);
+
     return json;
 }
